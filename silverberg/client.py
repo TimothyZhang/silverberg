@@ -129,7 +129,10 @@ class CQLClient(object):
             # Collection
             elif len(types) == 2 and types[0] in _unmarshallers and types[1] in _unmarshallers:
                 return _unmarshallers[types[0]](types[1], val)
-
+            
+            # Map
+            elif len(types) == 3 and types[0] in _unmarshallers and types[1] in _unmarshallers and types[2] in _unmarshallers:
+                return _unmarshallers[types[0]](types[1], types[2], val)
             # XXX: We do not currently implement the full range of types.
             # So we can not unmarshal all types in which case we should just
             # return the raw bytes.

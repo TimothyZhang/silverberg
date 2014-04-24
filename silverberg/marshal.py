@@ -43,6 +43,7 @@ COUNTER_TYPE = "org.apache.cassandra.db.marshal.CounterColumnType"
 DOUBLE_TYPE = "org.apache.cassandra.db.marshal.DoubleType"
 
 LIST_TYPE = "org.apache.cassandra.db.marshal.ListType"
+MAP_TYPE = "org.apache.cassandra.db.marshal.MapType"
 
 
 def prepare(query, params):
@@ -137,6 +138,29 @@ def unmarshal_list(objtype, bytesstr):
 
     return result
 
+def unmarshal_map(key_type, val_type, bytesstr):
+    result = {}
+    # First two bytes are an integer of list size
+    numelements = unmarshal_int(bytesstr[:2])
+    p = 2
+    for n in range(numelements):
+        # key len
+        length = unmarshal_int(bytesstr[p:p + 2])
+        p += 2
+        # key
+        key = unmarshallers[key_type](bytesstr[p:p + length])
+        p += length
+        
+        # val len
+        length = unmarshal_int(bytesstr[p:p + 2])
+        p += 2
+        # val
+        val = unmarshallers[val_type](bytesstr[p:p + length])
+        p += length
+        
+        result[key] = val
+
+    return result
 
 unmarshallers = {BYTES_TYPE:        unmarshal_noop,
                  ASCII_TYPE:        unmarshal_noop,
@@ -150,7 +174,8 @@ unmarshallers = {BYTES_TYPE:        unmarshal_noop,
                  TIME_UUID_TYPE:    unmarshal_uuid,
                  TIMESTAMP_TYPE:    unmarshal_timestamp,
                  COUNTER_TYPE:      unmarshal_initializable_int,
-                 LIST_TYPE:         unmarshal_list}
+                 LIST_TYPE:         unmarshal_list,
+                 MAP_TYPE:          unmarshal_map}
 
 
 def decode_bigint(term):
