@@ -44,7 +44,7 @@ LONG_TYPE = "org.apache.cassandra.db.marshal.LongType"
 UUID_TYPE = "org.apache.cassandra.db.marshal.UUIDType"
 LEXICAL_UUID_TYPE = "org.apache.cassandra.db.marshal.LexicalType"
 TIME_UUID_TYPE = "org.apache.cassandra.db.marshal.TimeUUIDType"
-TIMESTAMP_TYPE = "org.apache.cassandra.db.marshal.DateType"
+TIMESTAMP_TYPE = "org.apache.cassandra.db.marshal.TimestampType"
 COUNTER_TYPE = "org.apache.cassandra.db.marshal.CounterColumnType"
 DOUBLE_TYPE = "org.apache.cassandra.db.marshal.DoubleType"
 
@@ -122,7 +122,8 @@ def unmarshal_double(bytestr):
 
 def unmarshal_timestamp(bytestr):
     epoch = unmarshal_long(bytestr)
-    return datetime.utcfromtimestamp(epoch / 1000.0)
+    # prefer number to datetime, since datetime is not serializable
+    return epoch  # was datetime.utcfromtimestamp(epoch / 1000.0)
 
 
 def unmarshal_uuid(bytestr):
