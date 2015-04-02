@@ -43,6 +43,7 @@ TIMESTAMP_TYPE = "org.apache.cassandra.db.marshal.DateType"
 NEW_TIMESTAMP_TYPE = "org.apache.cassandra.db.marshal.TimestampType"
 COUNTER_TYPE = "org.apache.cassandra.db.marshal.CounterColumnType"
 DOUBLE_TYPE = "org.apache.cassandra.db.marshal.DoubleType"
+FLOAT_TYPE = "org.apache.cassandra.db.marshal.FloatType"
 
 LIST_TYPE = "org.apache.cassandra.db.marshal.ListType"
 
@@ -109,6 +110,7 @@ _long_packer = struct.Struct('>q')
 
 _double_packer = struct.Struct('>d')
 
+_float_packer = struct.Struct('>f')
 
 def unmarshal_long(bytestr):
     return _long_packer.unpack(bytestr)[0]
@@ -116,6 +118,10 @@ def unmarshal_long(bytestr):
 
 def unmarshal_double(bytestr):
     return _double_packer.unpack(bytestr)[0]
+
+
+def unmarshal_float(bytestr):
+    return _float_packer.unpack(bytestr)[0]
 
 
 def unmarshal_timestamp(bytestr):
@@ -152,6 +158,7 @@ unmarshallers = {BYTES_TYPE:        unmarshal_noop,
                  INTEGER32_TYPE:    unmarshal_int,
                  LONG_TYPE:         unmarshal_long,
                  DOUBLE_TYPE:       unmarshal_double,
+                 FLOAT_TYPE:        unmarshal_float,
                  UUID_TYPE:         unmarshal_uuid,
                  LEXICAL_UUID_TYPE: unmarshal_uuid,
                  TIME_UUID_TYPE:    unmarshal_uuid,

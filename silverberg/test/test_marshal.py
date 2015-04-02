@@ -26,7 +26,7 @@ from twisted.trial.unittest import TestCase
 
 from silverberg.marshal import (
     marshal, unmarshal_timestamp, unmarshal_int, unmarshal_bool,
-    unmarshal_initializable_int, unmarshal_double, prepare)
+    unmarshal_initializable_int, unmarshal_double, unmarshal_float, prepare)
 
 
 class StatementPreparation(TestCase):
@@ -103,6 +103,18 @@ class MarshallingUnmarshallingDouble(TestCase):
     def test_unmarshal_double(self):
         marshaled = '?\xc1\x99\x99\x99\x99\x99\x9a'
         self.assertEqual(unmarshal_double(marshaled), 0.1375)
+
+
+class MarshallingUnmarshallingFloat(TestCase):
+    """
+    Test marshalling and unmarshalling of floats
+    """
+    def test_unmarshal_double(self):
+        marshaled = 'F\x97\xd0@'
+        self.assertEqual(unmarshal_float(marshaled), 19432.125)
+
+        marshaled = '\xc6\x97\xd0@'
+        self.assertEqual(unmarshal_float(marshaled), -19432.125)
 
 
 class MarshallingUnmarshallingBoolean(TestCase):
