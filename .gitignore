@@ -6,3 +6,6 @@ _trial_coverage
 build
 dist
 htmldoc
+.project
+.pydevproject
+.idea
