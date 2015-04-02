@@ -112,6 +112,7 @@ class MarshallingUnmarshallingFloat(TestCase):
     def test_unmarshal_double(self):
         marshaled = 'F\x97\xd0@'
         self.assertEqual(unmarshal_float(marshaled), 19432.125)
+
         marshaled = '\xc6\x97\xd0@'
         self.assertEqual(unmarshal_float(marshaled), -19432.125)
 

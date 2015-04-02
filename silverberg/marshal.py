@@ -112,6 +112,7 @@ _double_packer = struct.Struct('>d')
 
 _float_packer = struct.Struct('>f')
 
+
 def unmarshal_long(bytestr):
     return _long_packer.unpack(bytestr)[0]
 
