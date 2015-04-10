@@ -85,6 +85,8 @@ def marshal(term):
         # If the datetime is naive, then it is considered UTC time and stored. If it is
         # timezone-aware, then its corresponding UTC time is stored
         return str(int(calendar.timegm(term.utctimetuple()) * 1000 + term.microsecond / 1e3))
+    elif term is None:
+        return "null"
     else:
         return str(term)
 
