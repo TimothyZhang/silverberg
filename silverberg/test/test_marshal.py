@@ -131,6 +131,15 @@ class MarshallingUnmarshallingSet(TestCase):
     """
     Test marshalling and unmarshalling of sets
     """
+    def test_marshal_set(self):
+        to_marshal = sortedset([])
+        self.assertEqual(marshal(to_marshal), '{}')
+        # the order of elements in set might change
+        to_marshal = sortedset([1, 2])
+        self.assertIn(marshal(to_marshal), {'{1, 2}', '{2, 1}'})
+        to_marshal = sortedset(['1', '2'])
+        self.assertIn(marshal(to_marshal), {"{'1', '2'}", "{'2', '1'}"})
+
     def test_unmarshal_set(self):
         marshalled_value_pairs = (
             ('\x00\x00', INTEGER_TYPE, sortedset()),

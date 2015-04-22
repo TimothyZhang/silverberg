@@ -85,6 +85,10 @@ def marshal(term):
         # If the datetime is naive, then it is considered UTC time and stored. If it is
         # timezone-aware, then its corresponding UTC time is stored
         return str(int(calendar.timegm(term.utctimetuple()) * 1000 + term.microsecond / 1e3))
+    elif isinstance(term, set) or isinstance(term, sortedset):
+        # python str() produces: set([1, 2, 3]), while cassandra wants: {1, 2, 3}
+        # so we have to marshal each element one by one.
+        return '{%s}' % (', '.join(map(marshal, term)))
     elif term is None:
         return "null"
     else:
